@@ -69,16 +69,14 @@ $userDeck = new Deck($cardData);
 </head>
 <body>
     <?php
-    // Assuming you have a function to draw a card from the deck
     $userDeck ->shuffle();
-    $drawnCard = $userDeck->draw(); // You need to implement this logic
+    $drawnCard = $userDeck->draw();
 
     if ($drawnCard) {
         echo "<h2>Drawn Card:</h2>";
         echo "<p>Name: " . $drawnCard->getCardName() . "</p>";
         echo "<p>Type: " . $drawnCard->getCardType() . "</p>";
         echo "<p>Description: " . $drawnCard->getCardDesc() . "</p>";
-        // Add other card properties as needed
     } else {
         echo "<p>No cards left in the deck.</p>";
     }
