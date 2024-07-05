@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap');
+
+
+
+body{
+    font-family: 'Cinzel', sans-serif;
+    background-image: url('assets/BODYBATTLE.png');
+    background-size: AUTO;
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+.container {
+    scale: 0.8;
+    width: 1980px;
+    height: 1020px;
+    padding: 40px;
+    background-image: url('assets/BATTLEFIELD.png');
+    background-size: AUTO;
+    background-position: 0px 10px;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    border: 4px solid #000000;
+    z-index: 0;
+    perspective: 1000px;
+    position: relative;
+
+    .enemy_battlefield {
+        scale: 0.9;
+        bottom: 350px;
+        right: 33px;
+        display: grid;
+        grid-template-columns: repeat(5, 200px);
+        gap: 20px;
+        justify-content: center;
+        position: relative;
+        transform: rotateX(-170deg)rotateY(180deg);
+        z-index: 0;
+    }
+
+    .battlefield {
+        bottom: 330px;
+        left: 20px;
+        display: grid;
+        grid-template-columns: repeat(5, 200px);
+        gap: 15px;
+        justify-content: center;
+        position: relative;
+        transform: rotateX(10deg);
+        z-index: 0;
+    }
+    
+
+    .enemy_hand img {
+        position: relative;
+        bottom:100px;
+        left: 750px;
+        transform: translateX(-50%);
+        z-index: 1;
+    }
+    
+    .user_hand img {
+        position: relative;
+        bottom: -710px;
+        left: 660px;
+        transform: translateX(-50%);
+        transition: transform 0.2s ease-in-out;
+        z-index: 1;
+    }
+    
+    .user_hand img:hover {
+        transform: translateX(-50%) translateY(-35%) scale(1.1);
+    }
+    
+}
+
+
+
+.card {
+    width: 120px;
+    height: 150px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    z-index: 0;
+}
+
+
+.description_container {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    width: 320px;
+    height: 560px;
+    z-index: 3;
+    left: 12.5%;
+    top: 25%;
+    border: 5px solid #0a0a0a;
+    background-image: url('assets/DESCRIPTION_BG.png');
+    overflow: visible;
+
+    .desc_title{
+        justify-content: center;
+        font-weight: 600;
+        font-size: 18px;
+        white-space: nowrap;
+        width: 291 px;
+        padding-left: 20px;
+        color: aliceblue;
+        border: 2px solid #0a0a0a;
+    }
+
+    .desc_card{
+        background-image: url('assets/DESCBG.png');
+        padding: 2px;
+        border: 2px solid #0a0a0a;
+        display: flex;
+        flex-direction: row;
+        .desc_stats{
+            padding: 10px;
+            color: aliceblue;
+            font-size: 22px;
+            font-weight: 500;
+        }
+    }
+
+    .desc_gap{
+        border: 2px solid #0a0a0a;
+        background-image: url('assets/DESCRIPTION_BG.png');
+        height: 20px;
+    }
+    .desc_text{
+        border: 2px solid #0a0a0a;
+        background-image: url('assets/DESCBG.png');
+        background-size: 350px 290px;
+        background-color: #0a0a0a;
+        color: aliceblue;
+        height: 50%;
+        padding-left: 20px;
+        padding-top: 10px;
+        padding-right: 20px;
+        font-weight: 500;
+        font-size: 21px;
+    }
+}
+
+.summon_container{
+    position: absolute;
+    display: none;
+    width: 560px;
+    height: 320px;
+    z-index: 3;
+    left: 35%;
+    top: 35%;
+    border: 5px solid #0a0a0a;
+    background-image: url('assets/DESCBG.png');
+    overflow: visible;
+    flex-direction: column;
+    .summon_message{
+        align-self: center;
+        text-align: center;
+        width: 320px;
+        height: 220px;
+        font-size: 30px;
+        font-weight: 600;
+        color: #f2f2f2;
+    }
+    .summon_buttons{
+        align-self: center;
+        
+        button {
+            font-family: 'Cinzel', sans-serif;
+            padding: 10px 40px;
+            font-size: 18px;
+            background-color: #333;
+            color: #fff;
+            text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 0;
+            z-index: 1;
+            user-select: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: unset;
+            padding: .8rem 1.5rem;
+            text-decoration: none;
+            font-weight: 900;
+            transition: all 0.7s cubic-bezier(0,.8,.26,.99);
+          }
+          
+          button:before {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            transition: .7s cubic-bezier(0,.8,.26,.99);
+            z-index: -1;
+            background-color: #333!important;
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+          }
+          
+          button:after {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 100%;
+            content: '';
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+            transition: .7s cubic-bezier(0,.8,.26,.99);
+          }
+          
+          button:hover:before {
+            box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
+          }
+          
+          button:hover:after {
+            box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
+          }
+          
+          button:active {
+            transform: translateY(4px);
+          }
+          
+          button:active:after {
+            box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
+          }
+    }
+}
