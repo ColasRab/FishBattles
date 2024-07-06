@@ -3,14 +3,14 @@ include("Card.php");
 
 class Deck
 {
-    private $cards = [];
+    public $cards = [];
 
     public function __construct()
     {
-        
     }
 
-    public function addDeck(array $cardData){
+    public function addDeck(array $cardData)
+    {
         foreach ($cardData as $cardEntry) {
             $this->addCard(
                 $cardEntry["id"],
@@ -40,11 +40,26 @@ class Deck
         return array_pop($this->cards);
     }
 
-    public function fetchActiveCard($cardName){
-        foreach ($this->cards as $card){
-            if ($card->getCardName() == $cardName){
+    public function fetchActiveCard($cardName)
+    {
+        foreach ($this->cards as $card) {
+            if ($card->getCardName() == $cardName) {
                 return $card;
             }
         }
+    }
+
+    public function getCardsJson()
+    {
+        $originalCardsData = $this->cards;
+        $serializedCardsData = [];
+
+        foreach ($originalCardsData as $key => $value) {
+            $cardArray = (array) $value;
+
+            $serializedCardsData[$key] = $cardArray;
+        }
+
+        return json_encode($serializedCardsData);
     }
 }
