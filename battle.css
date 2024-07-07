@@ -248,3 +248,24 @@ body{
           }
     }
 }
+
+.summoned_card_animation {
+    width: 430px;
+    height: 600px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1s, transform 1s;
+    pointer-events: none; /* Ensure it doesn't block clicks when not active */
+}
+
+.summoned_card_animation.animate {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1.1);
+    pointer-events: auto; /* Allow clicks when active */
+}

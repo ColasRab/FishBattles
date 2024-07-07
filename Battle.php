@@ -1,6 +1,6 @@
 <?php
-include("Deck.php");
-include("Effects.php");
+include_once("Deck.php");
+include_once("Effects.php");
 
 session_start();
 
@@ -20,58 +20,27 @@ $userDeckJson = $userDeck->getCardsJson();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tukaan</title>
     <link rel="stylesheet" href="battle.css" />
-    <script type="module">
-        let isSummon = false;
-        let cardEvent
-        import Hand from './Hand.js';
+    <script type="module" defer>
+        import Game from './Game.js';
 
         window.onload = function() {
-
             const userDeck = JSON.parse(<?php echo json_encode($userDeckJson); ?>);
             const enemyDeck = JSON.parse(<?php echo json_encode($enemyDeckJson); ?>);
-            console.log(Array.isArray(enemyDeck));
-            console.log(enemyDeck);
-            const userHand = new Hand(userDeck);
-            userHand.displayCards();
 
-            const enemyHand = new Hand(enemyDeck);
-            enemyHand.displayEnemyCard();
+            const session = new Game(userDeck, enemyDeck);
+            session.mainGame();
 
-            if (document.getElementById('summon1').src == null) {
-                document.getElementById('summon1').style.display = none;
-            }
-            if (document.getElementById('summon2').src == null) {
-                document.getElementById('summon2').style.display = none;
-            }
-            if (document.getElementById('summon3').src == null) {
-                document.getElementById('summon3').style.display = none;
-            }
-            if (document.getElementById('summon4').src == null) {
-                document.getElementById('summon4').style.display = none;
-            }
-            if (document.getElementById('summon5').src == null) {
-                document.getElementById('summon5').style.display = none;
-            }
-            if (document.getElementById('summon6').src == null) {
-                document.getElementById('summon6').style.display = none;
-            }
-            if (document.getElementById('summon7').src == null) {
-                document.getElementById('summon7').style.display = none;
-            }
-            if (document.getElementById('summon8').src == null) {
-                document.getElementById('summon8').style.display = none;
-            }
-            if (document.getElementById('summon9').src == null) {
-                document.getElementById('summon9').style.display = none;
-            }
-            if (document.getElementById('summon10').src == null) {
-                document.getElementById('summon10').style.display = none;
+            for (let i = 1; i <= 10; i++) {
+                if (document.getElementById(`summon${i}`).src == null) {
+                    document.getElementById(`summon${i}`).style.display = none;
+                }
             }
         }
     </script>
 </head>
 
 <body>
+
     <div class="description_container">
         <div class="desc_title">
             <p id="cardName"></p>
@@ -106,7 +75,6 @@ $userDeckJson = $userDeck->getCardsJson();
             <button id="cancelButton">Cancel</button>
         </div>
     </div>
-
 
     <div class="container">
         <div class="enemy_hand">
@@ -173,7 +141,7 @@ $userDeckJson = $userDeck->getCardsJson();
         </div>
 
     </div>
-
+<div class="summoned_card_animation"></div>
 </body>
 
 </html>

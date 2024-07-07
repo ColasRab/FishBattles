@@ -1,9 +1,12 @@
+import { showDescription, hideDescription } from "./Game.js";
 let isSummon = false;
 export default class Hand {
-    constructor(cards = []) {
+    constructor(cards = [], summonCallback) {
         this.cards = Array.isArray(cards) ? cards : [cards];
-        this.handArray = []; // Initialize the hand array
+        this.handArray = [];
+        this.fieldArray = [];
         this.shuffleCards();
+        this.summonCallback = summonCallback;
     }
 
     shuffleCards() {
@@ -11,7 +14,6 @@ export default class Hand {
             const j = Math.floor(Math.random() * (i + 1));
             [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
         }
-        // Populate the hand array with the first 5 cards
         this.handArray = this.cards.slice(0, 5).map((_, index) => index);
     }
 
@@ -42,15 +44,12 @@ export default class Hand {
             imgElement.dataset.attack = JSON.stringify({ desc: attack });
             imgElement.dataset.defense = JSON.stringify({ desc: defense });
             imgElement.dataset.image = JSON.stringify({ desc: imageSrc });
-            imgElement.onmouseover = () => this.showDescription(cardDetails);
-            imgElement.onmouseleave = () => this.hideDescription();
-            imgElement.addEventListener('click', function () { this.summonCard(cardDetails); }.bind(this));
+            imgElement.onmouseover = () => showDescription(cardDetails);
+            imgElement.onmouseleave = () => hideDescription();
+            imgElement.onclick = () => this.summonCard(cardDetails);
             document.querySelector('.user_hand').appendChild(imgElement);
         });
     }
-
-
-
 
     displayEnemyCard() {
         this.handArray.forEach(index => {
@@ -93,6 +92,7 @@ export default class Hand {
         }
     }
 
+
     updateHandDisplay() {
         const cardContainer = document.querySelector('.user_hand');
         while (cardContainer.firstChild) {
@@ -101,160 +101,99 @@ export default class Hand {
         this.displayCards();
     }
 
-
-    displaySingleCard(card, container, index) {
-        // Your existing logic to display a single card goes here
-        // For example:
-        const imgElement = document.createElement('img');
-        imgElement.src = card['\u0000Card\u0000image_url'];
-        imgElement.id = `card-${card['\u0000Card\u0000card_id']}`;
-        imgElement.alt = "Uploaded Image";
-        imgElement.width = 160;
-        imgElement.height = 240;
-        imgElement.dataset.cardId = card['\u0000Card\u0000card_id'].toString();
-        // Add event listeners as needed
-        container.appendChild(imgElement);
-    }
-
-    showDescription(card) {
-        const imageSrc = card['\u0000Card\u0000image_url'];
-        console.log(card);
-        const backImageSrc = card['\u0000Card\u0000back_card'];
-        const description = card['\u0000Card\u0000description'];
-        const name = card['\u0000Card\u0000name'];
-        const attack = card['\u0000Card\u0000atk'];
-        const defense = card['\u0000Card\u0000def'];
-        const cardId = card['\u0000Card\u0000card_id'];
-        document.getElementById('description').innerText = description;
-
-        document.getElementById('cardImage').src = imageSrc;
-
-        document.getElementById('cardName').innerText = name;
-
-        document.getElementById('atkCard').innerHTML = "<img src='assets/SWORD.png' width='30px' height='30px' style='vertical-align: middle;'> " + attack;
-
-        document.getElementById('defCard').innerHTML = "<img src='assets/SHIELD.png' width='30px' height='30px' style='vertical-align: middle;'> " + defense;
-
-
-        document.getElementsByClassName('description_container')[0].style.display = 'flex';
-    }
-
-
-    hideDescription() {
-        document.getElementsByClassName('description_container')[0].style.display = 'none';
-    }
-
     summonCard(card) {
-        console.log(card);
         const name = card['\u0000Card\u0000name'];
         document.getElementById('summonCard').innerText = name;
         document.getElementsByClassName('summon_container')[0].style.display = 'flex';
+        console.log(card);
 
-        document.getElementById('summonButton').addEventListener('click', () => { this.summonCondition(card) });
-        document.getElementById('setButton').addEventListener('click', () => this.hideSummonContainer());
-        document.getElementById('cancelButton').addEventListener('click', () => this.hideSummonContainer());
+        const button = document.querySelector('#summonButton');
+        button.onclick = () => this.summonCondition(card, 1)
+
+        const setButton = document.getElementById('setButton');
+        setButton.onclick = () => this.summonCondition(card, 0)
+
+        const cancelButton = document.getElementById('cancelButton');
+        cancelButton.onclick = () => this.hideSummonContainer();
     }
 
+    summonCondition(cardEvent, mode) {
+        if (this.hasSummonedDuringStandby) {
+            document.getElementById('summonCard').innerText = "Cannot summon.";
+            return;
+        }
+        const cards = document.querySelector('.battlefield');
+        console.log("check");
+        document.getElementsByClassName('summon_container')[0].style.display = 'none';
+        cards.onclick = (event) => this.placeCard(cardEvent, event.target.id, mode, () => this.removeCardFromHand(cardEvent));
 
+        this.hasSummonedDuringStandby = true;
+        isSummon = true;
 
+        if (this.summonCallback) {
+            this.summonCallback();
+        }
+    }
     hideSummonContainer() {
         isSummon = false;
         document.getElementsByClassName('summon_container')[0].style.display = 'none';
     }
 
-    summonCondition(cardEvent) {
-        console.log(cardEvent);
+    placeCard(card, divId, mode, onSuccessCallback) {
+        console.log(card);
 
-        const clickedFishCard = cardEvent.target; // Get the clicked fish card element
-        console.log(clickedFishCard);
-         const targetDataId = clickedFishCard.id; 
-        const cards = document.querySelectorAll('.card');
-
-        // Assuming you want to target cards with a specific data-id or id
-
-        cards.forEach((card) => {
-
-            // Now, reattach the event listeners programmatically
-            
-            if (card.id === targetDataId) {
-                card.addEventListener('click', () => this.placeCard(cardEvent, card.id, () => this.removeCardFromHand(cardEvent)));
-                card.onmouseover = () => this.showDescription(cardEvent);
-                card.onmouseleave = () => this.hideDescription();
-            }
-        });
-
-        // Hide the summon container
-        document.getElementsByClassName('summon_container')[0].style.display = 'none';
-
-        // Set the summon flag
-        isSummon = true;
-    }
-
-
-    cardAnimation() {
-
-    }
-
-    placeCard(card, divId, onSuccessCallback) {
-        console.log("i am called");
         if (isSummon) {
             const atk = card['\u0000Card\u0000atk'];
             const def = card['\u0000Card\u0000def'];
             const img = card['\u0000Card\u0000image_url'];
+            const back_img = card['\u0000Card\u0000back_card'];
             isSummon = false;
 
-            try {
-                switch (divId) {
-                    case '1':
-                        this.displayCardDetails('summon1', 'card_slot_1', atk, def, img);
-                        break;
-                    case '2':
-                        this.displayCardDetails('summon2', 'card_slot_2', atk, def, img);
-                        break;
-                    case '3':
-                        this.displayCardDetails('summon3', 'card_slot_3', atk, def, img);
-                        break;
-                    case '4':
-                        this.displayCardDetails('summon4', 'card_slot_4', atk, def, img);
-                        break;
-                    case '5':
-                        this.displayCardDetails('summon5', 'card_slot_5', atk, def, img);
-                        break;
-                    case '6':
-                        this.displayCardDetails('summon6', 'card_slot_6', atk, def, img);
-                        break;
-                    case '7':
-                        this.displayCardDetails('summon7', 'card_slot_7', tk, def, img);
-                        break;
-                    case '8':
-                        this.displayCardDetails('summon8', 'card_slot_8', atk, def, img);
-                        break;
-                    case '9':
-                        this.displayCardDetails('summon9', 'card_slot_9', atk, def, img);
-                        break;
-                    case '10':
-                        this.displayCardDetails('summon10', 'card_slot_10', atk, def, img);
-                        break;
-                    default:
-                        console.log("Invalid divId");
-                        break;
-                }
-            } catch (error) {
-                console.error(error);
+            console.log(divId);
+
+            this.displayCardDetails(`summon${divId}`, `card_slot_${divId}`, atk, def, img, back_img, mode);
+            if(mode == 1){
+                this.cardAnimation(img);
             }
+
             if (typeof onSuccessCallback === 'function') {
                 onSuccessCallback();
             }
+        }
 
+    }
+
+    displayCardDetails(slotId, slot, atk, def, img, back_img, mode) {
+        const slotElement = document.getElementById(slotId);
+        const stats = document.getElementById(slot);
+        switch (mode) {
+            case 0:
+                slotElement.style.display = 'block';
+                slotElement.src = back_img;
+                slotElement.width = 120;
+                slotElement.height = 180;
+                slotElement.style.transform = 'rotate(90deg)';  // Rotate the image 90 degrees
+                break;
+            case 1:
+                slotElement.style.display = 'block';
+                slotElement.src = img;
+                slotElement.width = 120;
+                slotElement.height = 180;
+                slotElement.style.transform = 'rotate(0deg)';  // Reset rotation
+                stats.innerHTML = `${atk}<br/><img src='assets/SWORD.png' width='35px' height='35px' style='vertical-align: middle;'> <br/>${def}<img src='assets/SHIELD.png' width='35px' height='35px' style='vertical-align: middle;'>`;
+                break;
         }
     }
 
-    displayCardDetails(slotId, slot, atk, def, img) {
-        const slotElement = document.getElementById(slotId);
-        slotElement.style.display = 'block';
-        slotElement.src = img;
-        const stats = document.getElementById(slot);
-        stats.innerHTML = `${atk}<br/><img src='assets/SWORD.png' width='35px' height='35px' style='vertical-align: middle;'> <br/>${def}<img src='assets/SHIELD.png' width='35px' height='35px' style='vertical-align: middle;'>`;
 
+    cardAnimation(img) {
+        const animationDiv = document.querySelector('.summoned_card_animation');
+        animationDiv.style.backgroundImage = `url(${img})`;
+        animationDiv.classList.add('animate');
+
+        setTimeout(() => {
+            animationDiv.classList.remove('animate');
+            animationDiv.style.backgroundImage = '';
+        }, 2000);
     }
 }
