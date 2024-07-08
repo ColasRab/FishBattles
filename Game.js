@@ -25,6 +25,7 @@ export default class Game {
             case 1:
                 this.standbyPhase();
                 this.endOfStandbyPhase();
+                this.gamePhase = 2;
                 break;
 
             case 2:
@@ -43,7 +44,7 @@ export default class Game {
     }
 
     drawPhase() {
-
+        
     }
 
     standbyPhase() {
@@ -61,8 +62,7 @@ export default class Game {
     }
 
     endOfStandbyPhase() {
-        // Logic to end the standby phase...
-        this.hasSummonedDuringStandby = false; // Reset summon status
+        this.hasSummonedDuringStandby = false;
     }
 }
 
