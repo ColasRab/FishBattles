@@ -15,6 +15,25 @@
             display: flex;
         }
 
+        /* Preloader styles */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9;
+        }
+
+        .preloader video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
         .sidebar {
             width: 250px;
             background-image: url(assets/2.png);
@@ -24,7 +43,7 @@
             overflow-y: auto;
         }
 
-        .inside_sidebar{
+        .inside_sidebar {
             padding-top: 10px;
             padding-left: 20px;
             width: 230px;
@@ -67,6 +86,7 @@
             margin-left: 270px;
             padding: 20px;
             width: calc(100% - 270px);
+            display: none; /* Hide by default */
         }
 
         .profile-header {
@@ -99,7 +119,6 @@
         }
 
         .main-actions .action {
-
             background-color: #444;
             padding: 20px;
             border-radius: 8px;
@@ -158,6 +177,9 @@
 </head>
 
 <body>
+    <div class="preloader" id="preloader">
+        <video src="assets/intro.mp4" autoplay></video>
+    </div>
     <div class="sidebar">
         <div class="inside_sidebar">
             <h2>Fish Battles</h2>
@@ -165,7 +187,7 @@
                 <li><a href="config.php"><img src="https://via.placeholder.com/20" alt="Play icon"> Play</a></li>
                 <li><a href="#"><img src="https://via.placeholder.com/20" alt="Play Computer icon"> Deck Editor</a></li>
                 <li><a href="#"><img src="https://via.placeholder.com/20" alt="Tournaments icon"> Tournaments</a></li>
-                <li><a href="#"><img src="https://via.placeholder.com/20" alt="4 Player icon">Newsletters</a></li>
+                <li><a href="#"><img src="https://via.placeholder.com/20" alt="4 Player icon"> Newsletters</a></li>
                 <li><a href="#"><img src="https://via.placeholder.com/20" alt="Leaderboard icon"> Leaderboard</a></li>
             </ul>
             <div style="margin-top: auto;">
@@ -180,7 +202,7 @@
             </div>
         </div>
     </div>
-    <div class="main-content">
+    <div class="main-content" id="main-content">
         <div class="profile-header">
             <img src="https://via.placeholder.com/100" alt="User profile picture">
             <div class="user-info">
@@ -251,6 +273,17 @@
             <img src="https://via.placeholder.com/300x200" alt="Daily puzzle">
         </div>
     </div>
+
+    <script>
+        const preloader = document.getElementById('preloader');
+        const mainContent = document.getElementById('main-content');
+        const video = preloader.querySelector('video');
+
+        video.addEventListener('ended', function() {
+            preloader.style.display = 'none';
+            mainContent.style.display = 'block';
+        });
+    </script>
 </body>
 
 </html>

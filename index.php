@@ -37,13 +37,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "SELECT * FROM users WHERE username = '$username' AND pass = '$password'";
             $res = mysqli_query($con, $sql);
 
-            if ($res && mysqli_num_rows($res) > 0) {
-                $_SESSION['username'] = $username;
-                $_SESSION['password'] = $password;
-                header("Location: ProfileDashboard.php");
-                exit;
-            } else {
-                $loginErr = "Invalid Username/Password";
+            if (empty($usernameErr) && empty($passwordErr)) {
+                include('SQLConnect.php');
+    
+                $sql = "SELECT * FROM users WHERE username = '$username'";
+                $result = mysqli_query($con, $sql);
+    
+                if (mysqli_num_rows($result) == 1) {
+                    $row = mysqli_fetch_assoc($result);
+                    $stored_hash = $row['pass'];
+    
+                    if (password_verify($password, $stored_hash)) {
+                        // Password is correct, start the session and redirect
+                        $_SESSION['username'] = $username;
+                        echo '<script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                let fadeElement = document.createElement("div");
+                                fadeElement.style.position = "fixed";
+                                fadeElement.style.top = "0";
+                                fadeElement.style.left = "0";
+                                fadeElement.style.width = "100%";
+                                fadeElement.style.height = "100%";
+                                fadeElement.style.backgroundColor = "black";
+                                fadeElement.style.opacity = "0";
+                                fadeElement.style.transition = "opacity 1s";
+                                document.body.appendChild(fadeElement);
+                                
+                                setTimeout(function() {
+                                    fadeElement.style.opacity = "1";
+                                }, 0);
+    
+                                setTimeout(function() {
+                                    window.location.href = "Home.php";
+                                }, 3000);
+                            });
+                        </script>';
+                        exit;
+                    } else {
+                        $passwordErr = "Invalid password";
+                    }
+                } else {
+                    $usernameErr = "Invalid username";
+                }
             }
         }
     }

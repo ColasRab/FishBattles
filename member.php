@@ -8,7 +8,7 @@ $emailErr = "";
 $termsErr = "";
 $ageErr = "";
 
-$error = ['uname' => false, 'password' => false, 'email' => false, 'check_password' => false, 'isLegal' => false, 'terms_conditions' => false];
+$error = ['uname' => false, 'password' => false, 'email' => false, 'check_password' => false, 'terms' => false, 'age' => false];
 
 function test_input($data)
 {
@@ -24,7 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = test_input($_POST['password']);
         $email = test_input($_POST['email']);
         $check_password = test_input($_POST['check_password']);
+        $isLegal = isset($_POST['isLegal']);
+        $terms_conditions = isset($_POST['terms_conditions']);
 
+        // Username validation
         if (empty($username)) {
             $usernameErr = "Username is required";
             $error['uname'] = true;
@@ -32,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['uname'] = false;
         }
 
+        // Password validation
         if (empty($password)) {
             $passwordErr = "Password is required";
             $error['password'] = true;
@@ -39,53 +43,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['password'] = false;
         }
 
+        // Email validation
         if (empty($email)) {
             $emailErr = "Email is required";
             $error['email'] = true;
-        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $emailErr = "Invalid email format";
-            $error['email'] = true;
         } else {
-            $error['email'] = false;
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $emailErr = "Invalid email format";
+                $error['email'] = true;
+            } else {
+                $error['email'] = false;
+            }
         }
 
-
+        // Confirm password validation
         if (empty($check_password)) {
-            $check_passwordErr = "Password is required";
+            $check_passwordErr = "Confirm Password is required";
+            $error['check_password'] = true;
+        } else if ($check_password != $password) {
+            $check_passwordErr = "Passwords do not match";
             $error['check_password'] = true;
         } else {
             $error['check_password'] = false;
         }
 
-        if ($check_password != $password) {
-            $check_passwordErr = "Password does not match";
-            $error['check_password'] = true;
+        // Age validation
+        if (!$isLegal) {
+            $ageErr = "You must be over the age of 13";
+            $error['age'] = true;
         } else {
-            $error['check_password'] = false;
+            $error['age'] = false;
         }
 
-        if (!$error) {
-            echo "IM HERE";
+        // Terms and conditions validation
+        if (!$terms_conditions) {
+            $termsErr = "You must agree to the terms and conditions";
+            $error['terms'] = true;
+        } else {
+            $error['terms'] = false;
+        }
 
+        // Check if there are no errors
+        if (!in_array(true, $error)) {
             include('SQLConnect.php');
-            $sql = "INSERT INTO users(
-                username,
-                email,
-                pass
-                ) VALUES (
-                '$username',
-                '$email',
-                '$password'
-                )";
+
+            // Hash the password before storing it
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $sql = "INSERT INTO users (username, email, pass) VALUES ('$username', '$email', '$hashed_password')";
             $res = mysqli_query($con, $sql);
 
-            header("Location: ProfileDashboard.php");
 
-            exit;
+            if ($res) {
+                echo '<script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            let fadeElement = document.createElement("div");
+                            fadeElement.style.position = "fixed";
+                            fadeElement.style.top = "0";
+                            fadeElement.style.left = "0";
+                            fadeElement.style.width = "100%";
+                            fadeElement.style.height = "100%";
+                            fadeElement.style.backgroundColor = "black";
+                            fadeElement.style.opacity = "0";
+                            fadeElement.style.transition = "opacity 1s";
+                            document.body.appendChild(fadeElement);
+                            
+                            setTimeout(function() {
+                                fadeElement.style.opacity = "1";
+                            }, 0);
+    
+                            setTimeout(function() {
+                                window.location.href = "Home.php";
+                            }, 3000);
+                        });
+                    </script>';
+                exit;
+            } else {
+                echo "Error: " . mysqli_error($con);
+            }
         }
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
