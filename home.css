@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Slab:wght@100..900&display=swap');
 
 
 body {
@@ -25,9 +27,20 @@ body {
 
         img {
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -55%);
+
+
+        }
+
+        .logo {
+            display: flex;
+            position: relative;
+            top: -10%;
+            -webkit-filter: drop-shadow(0 0 10px #000);
+            filter: drop-shadow(0 0 10px #000);
+
         }
     }
 }
@@ -78,7 +91,91 @@ body {
 
 #main {
     transition: margin-left .5s;
+    font-size: 30px;
     padding: 16px;
+
+    .header {
+        width: 1900px;
+        display: flex;
+        flex-direction: row;
+        color: white;
+        -webkit-filter: drop-shadow(0 0 10px #000);
+        filter: drop-shadow(0 0 10px #000);
+        align-items: center;
+        font-family: 'Righteous', cursive;
+
+        span {
+
+            padding: 10px 15px;
+            text-shadow: 2px 2px 4px #000;
+            font-weight: 800;
+        }
+
+
+        .profile_header {
+            position: absolute;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: right;
+            font-size: 22px;
+            font-weight: 300;
+            padding: 10px 15px;
+            font-family: 'Roboto Slab', sans-serif;
+            font-weight: 500;
+            line-height: 0.8;
+
+            img {
+
+                border-radius: 50%;
+                border: 2px solid rgba(255, 255, 255, 0.5);
+                margin: 0 auto;
+                margin-right: 20px;
+            }
+            
+            .text_profile{
+                display: flex;
+                flex-direction: column; 
+                padding-top: 8px;
+                padding-right: 10px;
+                align-items:flex-start;
+            }
+
+            .status_container {
+                display: flex;
+                align-items: center;
+            }
+
+            .status-circle {
+                display: inline-block;
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                margin-right: 2px;
+            }
+
+            .online {
+                background-color: #43B581;
+            }
+
+            .away {
+                background-color: #FAA61A;
+            }
+
+            .offline {
+                background-color: #747F8D;
+            }
+
+            .status-text {
+                font-weight: 100;
+                font-size: 12px;
+                color: #FFFFFF;
+                font-weight: bold;
+            }
+        }
+
+    }
 }
 
 .openbtn:hover {
