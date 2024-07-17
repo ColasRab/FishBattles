@@ -20,14 +20,15 @@ class Deck
                 $cardEntry["image_url"],
                 $cardEntry["rarity"],
                 $cardEntry["atk"],
-                $cardEntry["def"]
+                $cardEntry["def"],
+                $cardEntry["tribute_req"]
             );
         }
     }
 
-    public function addCard($cardId, $cardName, $cardType, $cardDescription, $image_url, $rarity, $cardAtk, $cardDef)
+    public function addCard($cardId, $cardName, $cardType, $cardDescription, $image_url, $rarity, $cardAtk, $cardDef, $tribute_req)
     {
-        $this->cards[] = new Card($cardId, $cardName, $cardType, $cardDescription, $image_url, $rarity, $cardAtk, $cardDef);
+        $this->cards[] = new Card($cardId, $cardName, $cardType, $cardDescription, $image_url, $rarity, $cardAtk, $cardDef, $tribute_req);
     }
 
     public function shuffle()

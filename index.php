@@ -50,6 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if (password_verify($password, $stored_hash)) {
                         // Password is correct, start the session and redirect
                         $_SESSION['username'] = $username;
+                        $_SESSION['isNewUser'] = false;
+                        
                         echo '<script>
                             document.addEventListener("DOMContentLoaded", function() {
                                 let fadeElement = document.createElement("div");

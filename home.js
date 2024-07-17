@@ -39,7 +39,7 @@ function resetStatusTimeout() {
   console.log('time => ' + statusTimeout);
   clearTimeout(statusTimeout);
   setStatus('online');
-  statusTimeout = setTimeout(() => setStatus('away'), 1500);
+  statusTimeout = setTimeout(() => setStatus('away'), 10000);
 }
 
 document.addEventListener('mousemove', resetStatusTimeout);

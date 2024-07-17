@@ -1,6 +1,6 @@
 import Hand from './Hand.js';
 
-let isSummon = false;
+let firstRound = true;
 
 export default class Game {
     constructor(user, enemy) {
@@ -14,9 +14,17 @@ export default class Game {
         this.gameFlag = true;
     }
 
-    
-    mainGame() {
+    nextPhase() {
+        if (firstRound) {
+            this.gamePhase = 3;
+        } else {
+            this.gamePhase++;
+        }
+        this.mainGame();
+        console.log(this.gamePhase);
+    }
 
+    mainGame() {
         switch (this.gamePhase) {
             case 0:
                 this.drawPhase();
@@ -25,7 +33,6 @@ export default class Game {
             case 1:
                 this.standbyPhase();
                 this.endOfStandbyPhase();
-                this.gamePhase = 2;
                 break;
 
             case 2:
@@ -40,29 +47,74 @@ export default class Game {
                 this.gameFlag = false;
                 break;
         }
-
     }
 
     drawPhase() {
-        
+        this.userHand.drawCard();
+        this.updateHandDisplay();
+        firstRound = false;
     }
 
     standbyPhase() {
         this.enemyHand.displayEnemyCard();
         this.userHand.displayCards();
-
+        this.endOfStandbyPhase();
     }
 
     attackingPhase() {
-
+        console.log("Attacking Phase");
+        this.userHand.initiateAttack();
     }
 
     endPhase() {
-
+        this.enemyTurn();
     }
 
     endOfStandbyPhase() {
         this.hasSummonedDuringStandby = false;
+    }
+
+    enemyTurn() {
+        this.enemyDrawPhase();
+
+        setTimeout(() => {
+            this.enemyStandbyPhase();
+        }, 5000);
+
+        setTimeout(() => {
+            this.enemyAttackingPhase();
+        }, 10000);
+
+        setTimeout(() => {
+            this.enemyEndPhase();
+        }, 15000);
+    }
+
+    enemyDrawPhase() {
+        console.log("Enemy Draw Phase");
+        this.enemyHand.drawCard(false);
+    }
+
+    enemyStandbyPhase() {
+        console.log("Enemy Standby Phase");
+        this.enemyHand.displayEnemyCard();
+        this.enemyHand.summonRandomCard();
+
+    }
+
+    enemyAttackingPhase() {
+        console.log("Enemy Attacking Phase");
+        this.enemyHand.attack(this.userHand);
+    }
+
+    enemyEndPhase() {
+        console.log("Enemy End Phase");
+        this.gamePhase = 0;
+        this.drawPhase();   
+    }
+
+    updateHandDisplay() {
+        this.userHand.updateHandDisplay();
     }
 }
 
@@ -84,16 +136,9 @@ export function showDescription(card) {
 
     document.getElementById('defCard').innerHTML = "<img src='assets/SHIELD.png' width='30px' height='30px' style='vertical-align: middle;'> " + defense;
 
-
     document.getElementsByClassName('description_container')[0].style.display = 'flex';
 }
-
 
 export function hideDescription() {
     document.getElementsByClassName('description_container')[0].style.display = 'none';
 }
-
-
-
-
-

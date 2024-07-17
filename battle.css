@@ -2,18 +2,58 @@
 
 
 
-body{
+body {
     font-family: 'Cinzel', sans-serif;
     background-image: url('assets/BODYBATTLE.png');
     background-size: AUTO;
     background-position: 0px 0px;
     background-repeat: no-repeat;
+    scale: 1;
+}
+
+.game_frame {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    left: 0;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    height: 70px;
+    font-family: 'Righteous', cursive;
+    z-index: 1000;
+    padding-right: 20px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.back_to_menu button {
+    font-size: 30px;
+    font-family: 'Righteous', cursive;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    text-shadow: 2px 2px 4px #000;
+    font-weight: 400;
+    transition: filter 0.3s, color 0.3s;
+}
+
+.back_to_menu button:hover {
+    color: rgba(255, 255, 255, 1);
+    transition: filter 0.3s, color 0.3s;
+    filter: drop-shadow(0 0 10px white);
 }
 
 .container {
-    scale: 0.8;
-    width: 1980px;
-    height: 1020px;
+    scale: 1;
+    top: 18%;
+    width: 1440px;
+    height: 720px;
     padding: 40px;
     background-image: url('assets/BATTLEFIELD.png');
     background-size: AUTO;
@@ -24,14 +64,15 @@ body{
     z-index: 0;
     perspective: 1000px;
     position: relative;
+    left: 0%;
 
     .enemy_battlefield {
         scale: 0.9;
         bottom: 350px;
-        right: 33px;
+        right: 10px;
         display: grid;
-        grid-template-columns: repeat(5, 200px);
-        gap: 20px;
+        grid-template-columns: repeat(5, 130px);
+        gap: 10px;
         justify-content: center;
         position: relative;
         transform: rotateX(-170deg)rotateY(180deg);
@@ -40,45 +81,58 @@ body{
 
     .battlefield {
         bottom: 330px;
-        left: 20px;
+        left: 0;
         display: grid;
-        grid-template-columns: repeat(5, 200px);
-        gap: 15px;
+        grid-template-columns: repeat(5, 130px);
+        gap: 10px;
         justify-content: center;
         position: relative;
         transform: rotateX(10deg);
         z-index: 0;
     }
-    
+
+    .enemy_hand {
+        scale: 0.9;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        top: -18%;
+        gap: 0px;
+        z-index: 1;
+    }
 
     .enemy_hand img {
         position: relative;
-        bottom:100px;
-        left: 750px;
-        transform: translateX(-50%);
-        z-index: 1;
-    }
-    
-    .user_hand img {
-        position: relative;
-        bottom: -710px;
-        left: 660px;
-        transform: translateX(-50%);
         transition: transform 0.2s ease-in-out;
         z-index: 1;
     }
-    
-    .user_hand img:hover {
-        transform: translateX(-50%) translateY(-35%) scale(1.1);
+
+    .user_hand {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        top: 60%;
+        gap: 0px;
+        z-index: 1;
     }
-    
+
+    .user_hand img {
+        position: relative;
+        transition: transform 0.2s ease-in-out;
+        z-index: 1;
+    }
+
+    .user_hand img:hover {
+        transform: translateY(-50%) scale(1.2);
+    }
+
 }
 
 
 
 .card {
-    width: 120px;
-    height: 150px;
+    width: 90px;
+    height: 120px;
     border: 2px solid #ccc;
     border-radius: 5px;
     text-align: center;
@@ -108,7 +162,7 @@ body{
     background-image: url('assets/DESCRIPTION_BG.png');
     overflow: visible;
 
-    .desc_title{
+    .desc_title {
         justify-content: center;
         font-weight: 600;
         font-size: 18px;
@@ -119,13 +173,14 @@ body{
         border: 2px solid #0a0a0a;
     }
 
-    .desc_card{
+    .desc_card {
         background-image: url('assets/DESCBG.png');
         padding: 2px;
         border: 2px solid #0a0a0a;
         display: flex;
         flex-direction: row;
-        .desc_stats{
+
+        .desc_stats {
             padding: 10px;
             color: aliceblue;
             font-size: 22px;
@@ -133,12 +188,13 @@ body{
         }
     }
 
-    .desc_gap{
+    .desc_gap {
         border: 2px solid #0a0a0a;
         background-image: url('assets/DESCRIPTION_BG.png');
         height: 20px;
     }
-    .desc_text{
+
+    .desc_text {
         border: 2px solid #0a0a0a;
         background-image: url('assets/DESCBG.png');
         background-size: 350px 290px;
@@ -153,7 +209,7 @@ body{
     }
 }
 
-.summon_container{
+.summon_container {
     position: absolute;
     display: none;
     width: 560px;
@@ -166,7 +222,7 @@ body{
     overflow: visible;
     flex-direction: column;
 
-    .summon_message{
+    .summon_message {
         align-self: center;
         text-align: center;
         width: 320px;
@@ -175,10 +231,10 @@ body{
         font-weight: 600;
         color: #f2f2f2;
     }
-    
-    .summon_buttons{
+
+    .summon_buttons {
         align-self: center;
-        
+
         button {
             font-family: 'Cinzel', sans-serif;
             padding: 10px 40px;
@@ -200,10 +256,10 @@ body{
             padding: .8rem 1.5rem;
             text-decoration: none;
             font-weight: 900;
-            transition: all 0.7s cubic-bezier(0,.8,.26,.99);
-          }
-          
-          button:before {
+            transition: all 0.7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        button:before {
             position: absolute;
             pointer-events: none;
             top: 0;
@@ -212,13 +268,13 @@ body{
             width: 100%;
             height: 100%;
             content: '';
-            transition: .7s cubic-bezier(0,.8,.26,.99);
+            transition: .7s cubic-bezier(0, .8, .26, .99);
             z-index: -1;
-            background-color: #333!important;
+            background-color: #333 !important;
             box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
-          }
-          
-          button:after {
+        }
+
+        button:after {
             position: absolute;
             pointer-events: none;
             top: 0;
@@ -228,24 +284,24 @@ body{
             height: 100%;
             content: '';
             box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-            transition: .7s cubic-bezier(0,.8,.26,.99);
-          }
-          
-          button:hover:before {
+            transition: .7s cubic-bezier(0, .8, .26, .99);
+        }
+
+        button:hover:before {
             box-shadow: 0 -4px rgb(0 0 0 / 50%) inset, 0 4px rgb(255 255 255 / 20%) inset, -4px 0 rgb(255 255 255 / 20%) inset, 4px 0 rgb(0 0 0 / 50%) inset;
-          }
-          
-          button:hover:after {
+        }
+
+        button:hover:after {
             box-shadow: 0 4px 0 0 rgb(0 0 0 / 15%);
-          }
-          
-          button:active {
+        }
+
+        button:active {
             transform: translateY(4px);
-          }
-          
-          button:active:after {
+        }
+
+        button:active:after {
             box-shadow: 0 0px 0 0 rgb(0 0 0 / 15%);
-          }
+        }
     }
 }
 
@@ -260,12 +316,29 @@ body{
     background-position: center;
     opacity: 0;
     transition: opacity 1s, transform 1s;
-    pointer-events: none; /* Ensure it doesn't block clicks when not active */
+    pointer-events: none;
 }
 
 .summoned_card_animation.animate {
     display: block;
     opacity: 1;
     transform: translate(-50%, -60%) scale(1.1);
-    pointer-events: auto; /* Allow clicks when active */
+    pointer-events: auto;
+}
+
+.next_phase_button {
+    position: absolute;
+    bottom: 50%;
+    right: 20px;
+    transition: transform 0.3s ease, filter 0.5s;
+}
+
+.next_phase_button img {
+    filter: drop-shadow(0 0 10px rgba(31, 31, 31, 0.5));
+    transition: transform 0.3s ease, filter 0.5s;
+}
+
+.next_phase_button:hover img {
+    filter: drop-shadow(0 0 10px rgb(255, 255, 255));
+    transform: scale(1.1);
 }

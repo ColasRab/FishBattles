@@ -27,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $isLegal = isset($_POST['isLegal']);
         $terms_conditions = isset($_POST['terms_conditions']);
 
-        // Username validation
         if (empty($username)) {
             $usernameErr = "Username is required";
             $error['uname'] = true;
@@ -35,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['uname'] = false;
         }
 
-        // Password validation
         if (empty($password)) {
             $passwordErr = "Password is required";
             $error['password'] = true;
@@ -43,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['password'] = false;
         }
 
-        // Email validation
         if (empty($email)) {
             $emailErr = "Email is required";
             $error['email'] = true;
@@ -56,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
-        // Confirm password validation
         if (empty($check_password)) {
             $check_passwordErr = "Confirm Password is required";
             $error['check_password'] = true;
@@ -67,7 +63,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['check_password'] = false;
         }
 
-        // Age validation
         if (!$isLegal) {
             $ageErr = "You must be over the age of 13";
             $error['age'] = true;
@@ -75,7 +70,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['age'] = false;
         }
 
-        // Terms and conditions validation
         if (!$terms_conditions) {
             $termsErr = "You must agree to the terms and conditions";
             $error['terms'] = true;
@@ -83,44 +77,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error['terms'] = false;
         }
 
-        // Check if there are no errors
         if (!in_array(true, $error)) {
-            include('SQLConnect.php');
 
-            // Hash the password before storing it
+            include('SQLConnect.php');
+            $cards = ['F0001', 'F0002', 'F0004', 'F0006', 'F0009', 'F0011', 'F0014', 'F0016', 'F0017'];
+            $cards_string = implode(",", $cards);
+
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
             $sql = "INSERT INTO users (username, email, pass) VALUES ('$username', '$email', '$hashed_password')";
             $res = mysqli_query($con, $sql);
 
-
             if ($res) {
-                echo '<script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            let fadeElement = document.createElement("div");
-                            fadeElement.style.position = "fixed";
-                            fadeElement.style.top = "0";
-                            fadeElement.style.left = "0";
-                            fadeElement.style.width = "100%";
-                            fadeElement.style.height = "100%";
-                            fadeElement.style.backgroundColor = "black";
-                            fadeElement.style.opacity = "0";
-                            fadeElement.style.transition = "opacity 1s";
-                            document.body.appendChild(fadeElement);
-                            
-                            setTimeout(function() {
-                                fadeElement.style.opacity = "1";
-                            }, 0);
-    
-                            setTimeout(function() {
-                                window.location.href = "Home.php";
-                            }, 3000);
-                        });
-                    </script>';
-                exit;
+                $user_id = mysqli_insert_id($con);
+                $deck_name = "Starter Deck";
+                $deck_description = "A deck of cards given to all new players";
+                $sql = "INSERT INTO decks (user_id, cards, name, description) VALUES ('$user_id', '$cards_string', '$deck_name', '$deck_description')";
+                $res = mysqli_query($con, $sql);
+
+                if ($res) {
+                    $_SESSION['username'] = $username;
+                    echo '<script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let fadeElement = document.createElement("div");
+                    fadeElement.style.position = "fixed";
+                    fadeElement.style.top = "0";
+                    fadeElement.style.left = "0";
+                    fadeElement.style.width = "100%";
+                    fadeElement.style.height = "100%";
+                    fadeElement.style.backgroundColor = "black";
+                    fadeElement.style.opacity = "0";
+                    fadeElement.style.transition = "opacity 1s";
+                    document.body.appendChild(fadeElement);
+                    
+                    setTimeout(function() {
+                        fadeElement.style.opacity = "1";
+                    }, 0);
+
+                    setTimeout(function() {
+                        window.location.href = "Home.php";
+                    }, 3000);
+                });
+            </script>';
+                    exit;
+                } else {
+                    echo "Error inserting data into decks table: " . mysqli_error($con);
+                }
             } else {
-                echo "Error: " . mysqli_error($con);
+                echo "Error inserting data into users table: " . mysqli_error($con);
             }
+
+            mysqli_close($con); // Close the connection
+
         }
     }
 }

@@ -8,6 +8,7 @@
         private $rarity;
         private $atk;
         private $def;
+        private $tribute_req;
         private $back_card = 'assets/cards/BACKOFCARD.png';
         
         public function __construct($id, $name, $type, $description, $image_url, $rarity, $atk, $def)
@@ -52,6 +53,10 @@
 
         public function getCardDef(){
             return $this->def;
+        }
+
+        public function getTributeReq(){
+            return $this->tribute_req;
         }
 
         public function getCardEffect(){
