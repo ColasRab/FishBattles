@@ -52,7 +52,7 @@ body {
 .container {
     scale: 1;
     top: 18%;
-    width: 1440px;
+    width: 1600px;
     height: 720px;
     padding: 40px;
     background-image: url('assets/BATTLEFIELD.png');
@@ -71,7 +71,7 @@ body {
         bottom: 350px;
         right: 10px;
         display: grid;
-        grid-template-columns: repeat(5, 130px);
+        grid-template-columns: repeat(5, 160px);
         gap: 10px;
         justify-content: center;
         position: relative;
@@ -83,7 +83,7 @@ body {
         bottom: 330px;
         left: 0;
         display: grid;
-        grid-template-columns: repeat(5, 130px);
+        grid-template-columns: repeat(5, 160px);
         gap: 10px;
         justify-content: center;
         position: relative;
@@ -118,12 +118,14 @@ body {
 
     .user_hand img {
         position: relative;
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s ease-in-out, z-index 0.2s;
         z-index: 1;
     }
 
     .user_hand img:hover {
+        z-index: 2;
         transform: translateY(-50%) scale(1.2);
+        transition: transform 0.2s ease-in-out, z-index 0.2s;
     }
 
 }
@@ -131,8 +133,8 @@ body {
 
 
 .card {
-    width: 90px;
-    height: 120px;
+    width: 120px;
+    height: 110px;
     border: 2px solid #ccc;
     border-radius: 5px;
     text-align: center;
@@ -328,7 +330,7 @@ body {
 
 .next_phase_button {
     position: absolute;
-    bottom: 50%;
+    bottom: 55%;
     right: 20px;
     transition: transform 0.3s ease, filter 0.5s;
 }
@@ -341,4 +343,73 @@ body {
 .next_phase_button:hover img {
     filter: drop-shadow(0 0 10px rgb(255, 255, 255));
     transform: scale(1.1);
+}
+
+.user_lp .enemy_lp{
+    border: 2px solid #000;
+}
+
+.user_lp{
+    position: absolute;
+    bottom: 9%;
+    left: 20px;
+    width: 360px;
+    height: 100px;
+    filter: drop-shadow(0 0 10px rgba(31, 31, 31, 0.9));
+}
+
+.user_lp img .enemy_lp img {
+    width: 100%;
+    height: auto;
+}
+
+#userLP, .userName {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+#userLP {
+    top: 55%;
+    font-size: 50px;
+    font-weight: 900;
+    color: white;
+}
+
+.userName {
+    bottom: 38%;
+    font-size: 25px;
+    font-weight: 500;
+    color: black;
+    text-shadow: 0 0 8px #000;
+}
+
+.enemy_lp{
+    position: absolute;
+    top: 3%;
+    right: 3%;
+    width: 360px;
+    height: 100px;
+    filter: drop-shadow(0 0 10px rgba(31, 31, 31, 0.9));
+}
+
+#enemyLP, .enemyName {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+#enemyLP {
+    top: 55%;
+    font-size: 50px;
+    font-weight: 900;
+    color: white;
+}
+
+.enemyName {
+    bottom: 38%;
+    font-size: 25px;
+    font-weight: 500;
+    color: black;
+    text-shadow: 0 0 8px #000;
 }

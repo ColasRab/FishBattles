@@ -6,6 +6,7 @@ session_start();
 
 $userDeck = $_SESSION['user_deck'];
 $enemyDeck = $_SESSION['user_deck'];
+$username = $_SESSION['username'];
 
 $userDeckJson = $userDeck->getCardsJson();
 $enemyDeckJson = $enemyDeck->getCardsJson();
@@ -178,12 +179,27 @@ $userDeckJson = $userDeck->getCardsJson();
             </div>
 
             <div class="next_phase_button">
-                <img src="assets/NEXTPHASE.png" width="360px" height="90px" alt="next">
+                <img src="assets/NEXTPHASE.png" width="200px" height="50px" alt="next">
             </div>
 
             <div id="phaseDisplay"></div>
-            <div id="userLifePoints"></div>
-            <div id="enemyLifePoints"></div>
+
+            <div class="user_lp" id="userLifePoints">
+                <img src="assets/LPCOUNTER.png" width="360px" height="120px" alt="next">
+                <div id="userLP">8000</div>
+                <div class="userName">
+                    <p><?php echo $username; ?></p>
+                </div>
+            </div>
+
+            <div class="enemy_lp" id="enemyLifePoints">
+                <img src="assets/LPCOUNTER.png" width="360px" height="120px" alt="next">
+                <div id="enemyLP">8000</div>
+                <div class="enemyName">
+                    <p>Enemy</p>
+                </div>
+            </div>
+
         </div>
         <div class="summoned_card_animation"></div>
     </div>

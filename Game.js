@@ -8,10 +8,12 @@ export default class Game {
         this.userHand = new Hand(user, () => {
             this.hasSummonedDuringStandby = true;
             console.log("A card has been summoned during the standby phase.");
-        });
-        this.enemyHand = new Hand(enemy);
+        }, this);
+        this.enemyHand = new Hand(enemy, null, this);
         this.gamePhase = 1;
         this.gameFlag = true;
+        this.userLP = 8000;
+        this.enemyLP = 8000;
     }
 
     nextPhase() {
@@ -104,8 +106,11 @@ export default class Game {
 
     enemyAttackingPhase() {
         console.log("Enemy Attacking Phase");
-        this.enemyHand.attack(this.userHand);
+        const totalDamage = this.enemyHand.enemyAttack(this.userHand, true);
+        console.log(`Total Damage Dealt: ${totalDamage}`);
+        this.updateLPDisplay();
     }
+    
 
     enemyEndPhase() {
         console.log("Enemy End Phase");
@@ -115,6 +120,11 @@ export default class Game {
 
     updateHandDisplay() {
         this.userHand.updateHandDisplay();
+    }
+
+    updateLPDisplay() {
+        document.getElementById('userLP').innerText = `${this.userLP}`;
+        document.getElementById('enemyLP').innerText = `${this.enemyLP}`;
     }
 }
 
