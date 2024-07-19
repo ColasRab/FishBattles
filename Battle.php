@@ -1,7 +1,5 @@
 <?php
 include_once("Deck.php");
-include_once("Effects.php");
-
 session_start();
 
 $userDeck = $_SESSION['user_deck'];
@@ -31,7 +29,6 @@ $userDeckJson = $userDeck->getCardsJson();
             const session = new Game(userDeck, enemyDeck);
             session.mainGame();
 
-            // Bind the nextPhase method to the button click event
             document.querySelector('.next_phase_button').onclick = function() {
                 session.nextPhase();
             };
@@ -182,7 +179,7 @@ $userDeckJson = $userDeck->getCardsJson();
                 <img src="assets/NEXTPHASE.png" width="200px" height="50px" alt="next">
             </div>
 
-            <div id="phaseDisplay"></div>
+            <div class="phaseContainer" id="phaseDisplay"></div>
 
             <div class="user_lp" id="userLifePoints">
                 <img src="assets/LPCOUNTER.png" width="360px" height="120px" alt="next">
@@ -202,7 +199,9 @@ $userDeckJson = $userDeck->getCardsJson();
 
         </div>
         <div class="summoned_card_animation"></div>
+        <div class="gameOverScreen" id="gameOverMessage">YOU WIN</div>
     </div>
+    
 </body>
 
 </html>

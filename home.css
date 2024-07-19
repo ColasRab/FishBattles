@@ -216,7 +216,7 @@ body {
     position: fixed;
     display: flex;
     z-index: 1;
-    top: 5;
+    top: 59px;
     right: 0;
     background-color: #1a1a1a;
     overflow-x: hidden;

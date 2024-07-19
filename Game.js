@@ -14,6 +14,7 @@ export default class Game {
         this.gameFlag = true;
         this.userLP = 8000;
         this.enemyLP = 8000;
+        this.updatePhaseDisplay();
     }
 
     nextPhase() {
@@ -23,28 +24,27 @@ export default class Game {
             this.gamePhase++;
         }
         this.mainGame();
+        this.updatePhaseDisplay();
         console.log(this.gamePhase);
     }
 
     mainGame() {
+        this.updatePhaseDisplay();
         switch (this.gamePhase) {
             case 0:
+                this.updatePhaseDisplay();
                 this.drawPhase();
                 break;
-
             case 1:
                 this.standbyPhase();
                 this.endOfStandbyPhase();
                 break;
-
             case 2:
                 this.attackingPhase();
                 break;
-
             case 3:
                 this.endPhase();
                 break;
-
             default:
                 this.gameFlag = false;
                 break;
@@ -53,8 +53,10 @@ export default class Game {
 
     drawPhase() {
         this.userHand.drawCard();
-        this.updateHandDisplay();
         firstRound = false;
+        setTimeout(() => {
+            this.nextPhase();
+        }, 3000);
     }
 
     standbyPhase() {
@@ -101,7 +103,6 @@ export default class Game {
         console.log("Enemy Standby Phase");
         this.enemyHand.displayEnemyCard();
         this.enemyHand.summonRandomCard();
-
     }
 
     enemyAttackingPhase() {
@@ -110,12 +111,11 @@ export default class Game {
         console.log(`Total Damage Dealt: ${totalDamage}`);
         this.updateLPDisplay();
     }
-    
 
     enemyEndPhase() {
         console.log("Enemy End Phase");
         this.gamePhase = 0;
-        this.drawPhase();   
+        this.drawPhase();
     }
 
     updateHandDisplay() {
@@ -123,27 +123,54 @@ export default class Game {
     }
 
     updateLPDisplay() {
+        if (this.userLP <= 0) {
+            this.displayGameOver("Game Over");
+            return true;
+        } else if (this.enemyLP <= 0) {
+            this.displayGameOver("You Win");
+            return true;
+        }
         document.getElementById('userLP').innerText = `${this.userLP}`;
         document.getElementById('enemyLP').innerText = `${this.enemyLP}`;
+    }
+
+    displayGameOver(message) {
+        document.getElementById('gameOverMessage').innerText = message;
+        const gameFrameElement = document.querySelector('.gameOverScreen');
+        gameFrameElement.style.display = 'flex';
+        this.gameFlag = false;
+    
+        const gameContainer = document.querySelector('.container');
+        gameContainer.classList.add('dimmed');
+    }
+
+    updatePhaseDisplay() {  
+        const phaseDisplay = document.getElementById('phaseDisplay');
+        const phaseContainer = document.querySelector('.phaseContainer');
+        const phases = ["Draw Phase", "Standby Phase", "Attacking Phase", "End Phase"];
+        phaseContainer.style.display = 'flex';
+        phaseDisplay.innerText = phases[this.gamePhase] || "Unknown Phase";
+    
+        phaseDisplay.classList.add('animate-phase');
+
+        setTimeout(() => {
+            phaseDisplay.classList.remove('animate-phase');
+            phaseContainer.style.display = 'none';
+        }, 2000);
     }
 }
 
 export function showDescription(card) {
     const imageSrc = card['\u0000Card\u0000image_url'];
-    const backImageSrc = card['\u0000Card\u0000back_card'];
     const description = card['\u0000Card\u0000description'];
     const name = card['\u0000Card\u0000name'];
     const attack = card['\u0000Card\u0000atk'];
     const defense = card['\u0000Card\u0000def'];
-    const cardId = card['\u0000Card\u0000card_id'];
+
     document.getElementById('description').innerText = description;
-
     document.getElementById('cardImage').src = imageSrc;
-
     document.getElementById('cardName').innerText = name;
-
     document.getElementById('atkCard').innerHTML = "<img src='assets/SWORD.png' width='30px' height='30px' style='vertical-align: middle;'> " + attack;
-
     document.getElementById('defCard').innerHTML = "<img src='assets/SHIELD.png' width='30px' height='30px' style='vertical-align: middle;'> " + defense;
 
     document.getElementsByClassName('description_container')[0].style.display = 'flex';

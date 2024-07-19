@@ -24,7 +24,7 @@ $username = $_SESSION['username'];
             <button class="nav-button" onclick="location.href='Newsletter.php'">NEWSLETTER</button>
             <button class="nav-button" onclick="location.href='#'">DEVS</button>
             <button class="play-button" onclick="location.href='Home.php'">HOME</button>
-            <button class="nav-button" onclick="location.href='Editor.php'">DECK EDITOR</button>
+            <button class="nav-button" onclick="location.href='Editor.php'">DECK VIEWER</button>
             <button class="nav-button" onclick="location.href='Gacha.php'">GACHA</button>
         </div>
 
@@ -56,7 +56,9 @@ $username = $_SESSION['username'];
                 <img src="assets/chest.png" height="640" width="1160" alt="Background final item">
             </div>
 
-            <div class="main_container"></div>
+            <div class="main_container">
+            This side is still under construction
+            </div>
         </div>
 
         <div class="friends_bar" id="friendsBar">

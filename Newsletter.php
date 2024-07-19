@@ -24,7 +24,7 @@ $username = $_SESSION['username'];
             <button class="nav-button" onclick="location.href='#'">NEWSLETTER</button>
             <button class="nav-button" onclick="location.href='Team.php'">DEVS</button>
             <button class="play-button" onclick="location.href='Home.php'">HOME</button>
-            <button class="nav-button" onclick="location.href='Editor.php'">DECK EDITOR</button>
+            <button class="nav-button" onclick="location.href='Editor.php'">DECK VIEWER</button>
             <button class="nav-button" onclick="location.href='Gacha.php'">GACHA</button>
         </div>
 

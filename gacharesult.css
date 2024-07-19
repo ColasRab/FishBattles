@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Slab:wght@100..900&display=swap');
+
+body {
+    font-family: 'Space Grotesk', sans-serif;
+    background-image: url(assets/BODYBATTLE.png);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    height: 70px;
+    font-family: 'Righteous', cursive;
+    z-index: 1000;
+    padding-right: 20px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.header button {
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    text-shadow: 2px 2px 4px #000;
+    transition: filter 0.3s, color 0.3s;
+}
+
+.header button:hover {
+    color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(0 0 10px white);
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+}
+
+.coins, .pearls {
+    margin-left: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.coins p, .pearls p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.main_body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    font-size: 30px;
+    display: none;
+    margin: auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    animation: slideIn 0.5s ease-in-out;
+}
+
+.modal-content img {
+    width: 50%;
+    height: 50%;
+    height: auto;
+    border-radius: 10px;
+    /*super shiny glow*/
+    box-shadow: 0 0 10px 5px #dfbe03;
+    animation: float 1s infinite;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    z-index: 1000;
+}
+
+.preloader video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -53,7 +53,7 @@ body {
     font-weight: 400;
     color: rgba(231, 191, 13, 1);
     position: relative;
-    z-index: 1; /* Ensure the text is above the trapezoid */
+    z-index: 1;
 }
 
 .currency {
@@ -68,19 +68,19 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 10px; /* Add spacing between the currency items */
+    margin-left: 10px;
 }
 
 .coins p, .pearls p {
     position: absolute;
-    top: 50%; /* Center the text vertically */
-    left: 50%; /* Center the text horizontally */
-    transform: translate(-50%, -50%); /* Adjust to center the text */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
     margin: 0;
-    font-size: 20px; /* Adjust the font size as needed */
+    font-size: 20px;
     font-weight: bold;
-    color: white; /* Ensure the text is visible on the image */
+    color: white;
 }
 
 .coins img, .pearls img {
@@ -229,7 +229,7 @@ body {
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-15px); /* Adjust the height of the float */
+        transform: translateY(-15px);
     }
     100% {
         transform: translateY(0);

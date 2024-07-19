@@ -47,7 +47,17 @@ document.addEventListener('mousemove', resetStatusTimeout);
 setStatus('offline');
 resetStatusTimeout();
 
-// Hover functionality for friends bar
 const hoverArea = document.querySelector('.hover-area');
 hoverArea.addEventListener('mouseenter', openNav);
 hoverArea.addEventListener('mouseleave', closeNav);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const preloaderVideo = document.getElementById('preloaderVideo');
+    const backgroundAudio = document.getElementById('backgroundAudio');
+    const preloader = document.getElementById('preloader');
+
+    preloaderVideo.addEventListener('ended', () => {
+        preloader.style.display = 'none';
+        backgroundAudio.play();
+    });
+});

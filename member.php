@@ -8,6 +8,10 @@ $emailErr = "";
 $termsErr = "";
 $ageErr = "";
 
+$_SESSION['username'] = "";
+$_SESSION['isNewUser'] = false;
+$_SESSION['user_id'] = "";
+
 $error = ['uname' => false, 'password' => false, 'email' => false, 'check_password' => false, 'terms' => false, 'age' => false];
 
 function test_input($data)
@@ -90,14 +94,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($res) {
                 $user_id = mysqli_insert_id($con);
-                $deck_name = "Starter Deck";
-                $deck_description = "A deck of cards given to all new players";
-                $sql = "INSERT INTO decks (user_id, cards, name, description) VALUES ('$user_id', '$cards_string', '$deck_name', '$deck_description')";
-                $res = mysqli_query($con, $sql);
 
-                if ($res) {
-                    $_SESSION['username'] = $username;
-                    echo '<script>
+                $_SESSION['username'] = $username;
+                $_SESSION['isNewUser'] = true;
+                $_SESSION['user_id'] = $user_id;
+
+                echo '<script>
                 document.addEventListener("DOMContentLoaded", function() {
                     let fadeElement = document.createElement("div");
                     fadeElement.style.position = "fixed";
@@ -119,15 +121,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }, 3000);
                 });
             </script>';
-                    exit;
-                } else {
-                    echo "Error inserting data into decks table: " . mysqli_error($con);
-                }
+                exit;
             } else {
                 echo "Error inserting data into users table: " . mysqli_error($con);
             }
 
-            mysqli_close($con); // Close the connection
+            mysqli_close($con);
 
         }
     }

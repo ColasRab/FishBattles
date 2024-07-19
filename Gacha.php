@@ -4,9 +4,12 @@ if (!isset($_SESSION['username'])) {
     header('Location: index.php');
     exit;
 }
-$username = $_SESSION['username'];
-?>
 
+$username = $_SESSION['username'];
+$user_coins = $_SESSION['coins'];
+$user_pearls = $_SESSION['pearls'];
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,11 +34,11 @@ $username = $_SESSION['username'];
 
         <div class="currency">
             <div class="coins">
-                <p id="coins">0</p>
+                <p id="coins"><?php echo $user_coins ?></p>
                 <img src="assets/COINSCURRENCY.png" width="211.90" height="60" alt="Coins">
             </div>
             <div class="pearls">
-                <p id="pearls">0</p>
+                <p id="pearls"><?php echo $user_pearls ?></p>
                 <img src="assets/PEARLSCURRENCY.png" width="211.90" height="60" alt="Pearls">
             </div>
         </div>
@@ -69,7 +72,7 @@ $username = $_SESSION['username'];
                     </div>
                 </div>
                 <div class="gacha_button" onclick="gacha()">
-                    <img src="assets/GACHABUTTON.png" width="360px" height="90px">
+                    <img src="assets/GACHABUTTON.png" width="360px" height="90px" alt="Gacha Button">
                 </div>
             </div>
         </div>

@@ -234,9 +234,9 @@ body {
             display: flex;
             align-items: flex-end;
             justify-content: center;
-            color: white; /* Text color */
-            font-size: 16px; /* Adjust text size as needed */
-            padding: 10px; /* Adjust padding as needed */
+            color: white;
+            font-size: 16px;
+            padding: 10px;
             box-sizing: border-box;
         }
         
@@ -255,8 +255,8 @@ body {
         .card1 .text {
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
-            padding: 10px; /* Adjust padding as needed */
-            border-radius: 0 0 10px 10px; /* Match card's bottom border radius */
+            padding: 10px;
+            border-radius: 0 0 10px 10px;
             text-align: center;
             box-sizing: border-box;
         }

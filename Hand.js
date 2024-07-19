@@ -7,7 +7,7 @@ export default class Hand {
         this.gameInstance = gameInstance;
         this.cards = Array.isArray(cards) ? cards : [cards];
         this.handArray = [];
-        this.fieldArray = Array(5).fill(null); // Assuming there are 5 slots for field cards
+        this.fieldArray = Array(5).fill(null);
         this.shuffleCards();
         this.summonCallback = summonCallback;
     }
@@ -28,8 +28,8 @@ export default class Hand {
         console.log("Drawing a card.");
         this.hasSummonedDuringStandby = false;
         if (this.cards.length > this.handArray.length) {
-            const newCardIndex = this.handArray.length; // The next card to draw
-            this.handArray.push(newCardIndex); // Add the index of the drawn card to handArray
+            const newCardIndex = this.handArray.length;
+            this.handArray.push(newCardIndex);
 
             this.updateHandDisplay(isUser);
         } else {
@@ -130,6 +130,13 @@ export default class Hand {
 
 
     summonCondition(cardEvent, mode, isAI = false) {
+        if (mode === 0) {
+            console.log("Setting card in defense position.");
+            cardEvent.position = cardEvent.position || 'defense';
+        } else {
+            console.log("Setting card in attack position.");
+            cardEvent.position = cardEvent.position || 'attack';
+        }
         console.log(this.hasSummonedDuringStandby);
         if (this.hasSummonedDuringStandby) {
             document.getElementById('summonCard').innerText = "Cannot summon.";
@@ -177,6 +184,8 @@ export default class Hand {
         const back_img = card['\u0000Card\u0000back_card'];
         isSummon = false;
 
+        card.isInDefensePosition = (mode === 0);
+
         this.displayCardDetails(`summon${divId}`, `card_slot_${divId}`, atk, def, img, back_img, mode);
         if (mode === 1) {
             this.cardAnimation(img);
@@ -222,8 +231,11 @@ export default class Hand {
         }, 2000);
     }
 
+    revealSetCard(cardElement, cardDetails) {
+        cardElement.src = cardDetails['\u0000Card\u0000image_url'];
+    }
+
     initiateAttack() {
-        // Reset the hasAttacked property for all cards
         this.fieldArray.forEach(card => {
             if (card !== null) {
                 card.hasAttacked = false;
@@ -237,7 +249,7 @@ export default class Hand {
             const cardId = event.target.id;
             const index = parseInt(cardId.replace('summon', ''));
             const card = this.fieldArray[index];
-            if (card !== null && !card.hasAttacked) { // Check if card hasn't attacked
+            if (card !== null && !card.hasAttacked) {
                 this.selectAttacker(card, index);
                 const opponentFieldCards = this.gameInstance.enemyHand.fieldArray.filter(card => card !== null);
                 if (opponentFieldCards.length === 0) {
@@ -251,7 +263,11 @@ export default class Hand {
             const index = parseInt(cardId.replace('summon', '')) - 11;
             const card = this.gameInstance.enemyHand.fieldArray[index];
             if (card !== null && this.selectedAttacker) {
-                this.selectTarget(card, index);
+                const cardElement = document.getElementById(`summon${index + 11}`);
+                this.revealSetCard(cardElement, card);
+                setTimeout(() => {
+                    this.selectTarget(card, index);
+                }, 2000); // Wait for 2 seconds to show the card
             }
         };
     }
@@ -271,39 +287,56 @@ export default class Hand {
         const damage = this.attack(this.gameInstance.enemyHand, false, attackerCard, attackerIndex, card, index);
         this.gameInstance.enemyLP -= damage;
         this.gameInstance.updateLPDisplay();
-        this.selectedAttacker = null; // Reset the selected attacker
+        this.selectedAttacker = null;
     }
 
-    directAttack(attackingCard, attackerIndex) {
+    directAttack(attackingCard) {
         const cardAttack = attackingCard['\u0000Card\u0000atk'];
         console.log(`Direct attack with ${attackingCard['\u0000Card\u0000name']} dealing ${cardAttack} damage.`);
         this.gameInstance.enemyLP -= cardAttack;
         this.gameInstance.updateLPDisplay();
-        this.selectedAttacker = null; // Reset the selected attacker
-        attackingCard.hasAttacked = true; // Mark card as having attacked
+        this.selectedAttacker = null;
+        attackingCard.hasAttacked = true;
     }
 
     attack(opponentHand, isAI, attackingCard, attackerIndex, targetCard, targetIndex) {
         const cardAttack = attackingCard['\u0000Card\u0000atk'];
-        const targetCardAttack = targetCard['\u0000Card\u0000atk'];
+        const isTargetInDefense = targetCard.position === 'defense';
+        const targetPoints = isTargetInDefense ? targetCard['\u0000Card\u0000def'] : targetCard['\u0000Card\u0000atk'];
         let damage = 0;
 
-        if (cardAttack >= targetCardAttack) {
-            opponentHand.removeCardFromField(targetCard, true);
-            damage = cardAttack - targetCardAttack;
-            opponentHand.gameInstance.enemyLP -= damage;
+        if (!isTargetInDefense) {
+            if (cardAttack >= targetPoints) {
+                opponentHand.removeCardFromField(targetCard, true);
+                damage = cardAttack - targetPoints;
+                opponentHand.gameInstance.enemyLP -= damage;
+            } else {
+                this.removeCardFromField(attackingCard);
+                this.fieldArray[attackerIndex] = null;
+                damage = targetPoints - cardAttack;
+                if (damage > 0) {
+                    opponentHand.gameInstance.userLP -= damage;
+                    damage = 0;
+                }
+            }
+
         } else {
-            this.removeCardFromField(attackingCard);
-            this.fieldArray[attackerIndex] = null;
-            damage = targetCardAttack - cardAttack;
-            if (damage > 0) {
+            if (cardAttack > targetPoints) {
+                opponentHand.removeCardFromField(targetCard, true);
+                damage = cardAttack - targetPoints;
+                damage = 0;
+            } else if (cardAttack < targetPoints) {
+                this.removeCardFromField(attackingCard);
+                this.fieldArray[attackerIndex] = null;
+                damage = targetPoints - cardAttack;
                 opponentHand.gameInstance.userLP -= damage;
+            } else {
+                console.log("Both");
                 damage = 0;
             }
         }
 
-        console.log(`Damage dealt: ${damage}`);
-        attackingCard.hasAttacked = true; // Mark card as having attacked
+        this.gameInstance.updateLPDisplay();
         return damage;
     }
 
@@ -312,7 +345,7 @@ export default class Hand {
         if (this.handArray.length > 0) {
             const randomIndex = Math.floor(Math.random() * this.handArray.length);
             const cardIndex = this.handArray[randomIndex];
-            const randomCard = this.cards[cardIndex]; // Access the card details using the index
+            const randomCard = this.cards[cardIndex];
             console.log(randomCard);
             this.summonCard(randomCard, true);
         }
@@ -323,34 +356,50 @@ export default class Hand {
         const opponentFieldCards = opponentHand.fieldArray.filter(card => card !== null);
         let totalDamage = 0;
 
-
         fieldCards.forEach((card, index) => {
             const cardAttack = card['\u0000Card\u0000atk'];
 
             if (opponentFieldCards.length > 0) {
                 const targetCard = opponentFieldCards.shift();
-                const targetCardAttack = targetCard['\u0000Card\u0000atk'];
+                const isTargetInDefense = targetCard.position === 'defense';
+                const targetPoints = isTargetInDefense ? targetCard['\u0000Card\u0000def'] : targetCard['\u0000Card\u0000atk'];
+                let damage = 0;
 
-                if (cardAttack >= targetCardAttack) {
-                    opponentHand.removeCardFromField(targetCard);
-                    const damage = cardAttack - targetCardAttack;
-                    if (damage > 0) {
-                        if (isAI) {
-                            opponentHand.gameInstance.userLP -= damage;
-                        } else {
+                console.log(isTargetInDefense, cardAttack, targetPoints);
+
+                if (!isTargetInDefense) {
+                    if (cardAttack >= targetPoints) {
+                        opponentHand.removeCardFromField(targetCard);
+                        damage = cardAttack - targetPoints;
+                        opponentHand.gameInstance.userLP -= damage;
+                    } else {
+                        this.removeCardFromField(card, true); 
+                        this.fieldArray[index] = null;
+                        damage = targetPoints - cardAttack;
+                        if (damage > 0) {
                             opponentHand.gameInstance.enemyLP -= damage;
+                            damage = 0;
                         }
                     }
-                    totalDamage += damage;
-                    console.log(`Damage to opponent: ${damage}`);
-                } else {
-                    this.removeCardFromField(card, isAI = true);
-                    this.fieldArray[index] = null;
-                    const damage = targetCardAttack - cardAttack;
 
-                    totalDamage += damage;
-                    console.log(`Damage to self: ${damage}`);
+                } else {
+                    if (cardAttack > targetPoints) {
+                        opponentHand.removeCardFromField(targetCard);
+                        damage = cardAttack - targetPoints;
+                        damage = 0;
+                    } else if (cardAttack < targetPoints) {
+                        this.removeCardFromField(card, true);
+                        this.fieldArray[index] = null;
+                        damage = targetPoints - cardAttack;
+                        opponentHand.gameInstance.enemyLP -= damage;
+                    } else {
+                        console.log("Both");
+                        damage = 0;
+                    }
                 }
+
+                this.gameInstance.updateLPDisplay();
+
             } else {
                 const damage = cardAttack;
                 if (isAI) {
@@ -363,8 +412,6 @@ export default class Hand {
             }
         });
     }
-
-
 
     removeCardFromHand(cardEvent, isUser) {
         const cardIndex = this.cards.findIndex(card => card && card['\u0000Card\u0000card_id'] === cardEvent['\u0000Card\u0000card_id']);
@@ -412,6 +459,4 @@ export default class Hand {
             }
         }
     }
-
-
 }
