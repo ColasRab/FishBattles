@@ -117,6 +117,10 @@ mysqli_close($con);
 
 $isNew = false;
 $_SESSION['isNewUser'] = $isNew;
+
+if (!isset($_SESSION['video_played'])) {
+    $_SESSION['video_played'] = false;
+}
 ?>
 
 <!DOCTYPE html>
@@ -131,11 +135,12 @@ $_SESSION['isNewUser'] = $isNew;
 </head>
 
 <body>
-    <div class="preloader" id="preloader">
-<!--play the video if first instance of opening the page-->
-
-        <video id="preloaderVideo" src="assets/INTRO.mp4" autoplay></video>
-    </div>
+    <?php if (!$_SESSION['video_played']) : ?>
+        <div class="preloader" id="preloader">
+            <video id="preloaderVideo" src="assets/INTRO.mp4" autoplay></video>
+        </div>
+        <?php $_SESSION['video_played'] = true; ?>
+    <?php endif; ?>
 
     <div class="header">
         <div class="navbar">

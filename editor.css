@@ -142,11 +142,15 @@ h1 {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .card:hover {
     transform: scale(1.05);
+}
+
+.card.selected {
+    box-shadow: 0 0 10px 5px white;
 }
 
 .card img {
@@ -169,7 +173,7 @@ h1 {
     margin-top: 20px;
 }
 
-.deck-actions button {
+.deck-actions button, #delete-card-btn {
     padding: 10px 20px;
     font-size: 1rem;
     color: #fff;
@@ -180,6 +184,6 @@ h1 {
     transition: background 0.2s;
 }
 
-.deck-actions button:hover {
+.deck-actions button:hover, #delete-card-btn:hover {
     background: #0056b3;
 }

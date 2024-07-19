@@ -56,8 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const backgroundAudio = document.getElementById('backgroundAudio');
     const preloader = document.getElementById('preloader');
 
+    if (preloaderVideo) {
     preloaderVideo.addEventListener('ended', () => {
         preloader.style.display = 'none';
         backgroundAudio.play();
     });
+  } else {
+    backgroundAudio.play();
+  }
 });

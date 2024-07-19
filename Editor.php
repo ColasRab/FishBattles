@@ -50,7 +50,6 @@ $deckDataJson = json_encode(array_map(function ($id) use ($cardData) {
     return $cardData[$id];
 }, $deck));
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -110,11 +109,45 @@ $deckDataJson = json_encode(array_map(function ($id) use ($cardData) {
             cardDiv.id = `deck_${i + 1}`;
             const card = deckData[i];
             if (card) {
-                cardDiv.innerHTML = `<img src="${card.image_url}" alt="${card.name}" width="100" height="140">`;
+                cardDiv.innerHTML = `
+                    <img src="${card.image_url}" alt="${card.name}" width="100" height="140">
+                    <button class="delete-btn" data-card-id="${card.id}">Delete</button>`;
             } else {
                 cardDiv.innerHTML = `<img src="" alt="Empty Slot" width="100" height="140" style="display:none;"><p>Empty Slot</p>`;
             }
             deckList.appendChild(cardDiv);
+        }
+
+        // Add event listener to delete buttons
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const cardId = this.getAttribute('data-card-id');
+                deleteCardFromDeck(cardId);
+            });
+        });
+
+        function deleteCardFromDeck(cardId) {
+            fetch('delete_card.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ card_id: cardId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+
+                    const cardDiv = document.querySelector(`.delete-btn[data-card-id="${cardId}"]`).parentElement;
+                    cardDiv.parentNode.removeChild(cardDiv);
+                    alert('Card deleted successfully!');
+                } else {
+                    alert('Failed to delete card.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
     </script>
 </body>
